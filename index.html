@@ -103,18 +103,37 @@
         el.classList.add('selected');
     }
 
-    function startAI() {
-        const p = document.getElementById('prompt').value;
-        const f = document.getElementById('file-up').files[0];
+   async function startAI() {
+    const p = document.getElementById('prompt').value;
+    
+    if (!p) {
+        alert("Pehle kuch likhein!");
+        return;
+    }
+
+    try {
+        // Yeh line aapki api/generate.js file ko connect karegi
+        const response = await fetch('/api/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: p })
+        });
         
-        if (!p && !f) {
-            alert("Please type something or upload a photo first!");
-            return;
+        const result = await response.json();
+        
+        if (result.candidates && result.candidates[0]) {
+            // AI ka asli jawab yahan alert mein aayega
+            alert("AI Design Idea: " + result.candidates[0].content.parts[0].text);
+        } else {
+            alert("API se jawab nahi mila. Vercel mein Key check karein.");
         }
-        
-        alert("Connecting to Gemini 1.5 Flash... Make sure your API Key is set in Vercel Environment Variables.");
+    } catch (e) {
+        alert("Connection Error! Vercel par project ko Redeploy karein.");
+    }
+
     }
 </script>
 
 </body>
 </html>
+
