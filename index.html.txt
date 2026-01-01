@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarimax AI Studio - Full Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --accent: #a855f7; --bg: #050505; --card-bg: #0a0a0a; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        header { display: flex; justify-content: space-between; padding: 15px 40px; border-bottom: 1px solid #222; align-items: center; }
+        .logo { font-weight: 900; letter-spacing: 2px; font-size: 1.2rem; }
+        .nav span { margin: 0 15px; font-size: 11px; color: #888; cursor: pointer; text-transform: uppercase; font-weight: bold; }
+        .nav span.active { color: white; border-bottom: 2px solid white; padding-bottom: 5px; }
+
+        .container { max-width: 1000px; margin: 40px auto; text-align: center; padding: 20px; }
+        h1 { text-transform: uppercase; font-size: 2.2rem; letter-spacing: 1px; margin-bottom: 30px; }
+
+        /* Upload Area */
+        .upload-container {
+            border: 2px dashed #333;
+            padding: 50px;
+            border-radius: 12px;
+            background: var(--card-bg);
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .upload-container:hover { border-color: var(--accent); }
+        #preview-img { max-width: 250px; display: none; border-radius: 8px; margin-top: 15px; border: 1px solid var(--accent); }
+
+        .input-bar { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; }
+        input[type="text"] { background: #111; border: 1px solid #333; color: white; padding: 12px 25px; border-radius: 30px; width: 50%; outline: none; }
+        .gen-btn { background: white; color: black; border: none; padding: 12px 35px; border-radius: 30px; font-weight: bold; cursor: pointer; }
+        .gen-btn:hover { background: var(--accent); color: white; }
+
+        /* Categories Grid */
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .card { background: var(--card-bg); border: 1px solid #222; padding: 25px 10px; cursor: pointer; transition: 0.2s; border-radius: 4px; }
+        .card:hover { border-color: #555; background: #0f0f0f; }
+        .card.selected { border-color: var(--accent); background: #150a20; }
+        .card i { font-size: 1.5rem; color: #ccc; margin-bottom: 15px; display: block; }
+        .card span { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">SARIMAX PIECE</div>
+    <div class="nav">
+        <span class="active">Designer</span>
+        <span>Ghost</span>
+        <span>Banner</span>
+        <span>Photoshoot</span>
+    </div>
+    <button style="background:var(--accent); color:white; border:none; padding:8px 15px; border-radius:5px; font-size:10px; cursor:pointer;">SETTINGS</button>
+</header>
+
+<div class="container">
+    <h1>Collection Studio</h1>
+
+    <div class="upload-container" onclick="document.getElementById('file-up').click()">
+        <i class="fas fa-camera" style="font-size: 2rem; color: #555;"></i>
+        <p id="upload-text">Describe your idea or upload an image</p>
+        <input type="file" id="file-up" hidden accept="image/*" onchange="handleFile(this)">
+        <img id="preview-img" src="" alt="preview">
+    </div>
+
+    <div class="input-bar">
+        <input type="text" id="prompt" placeholder="Describe your design concepts...">
+        <button class="gen-btn" onclick="startAI()">GENERATE</button>
+    </div>
+
+    <div class="grid">
+        <div class="card" onclick="mark(this)"><i class="fas fa-bars"></i><span>Trousers</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-square-full"></i><span>Shorts</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-running"></i><span>Tracksuits</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-tshirt"></i><span>T-Shirts</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-user-secret"></i><span>Hoodies</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-vest"></i><span>Jackets</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-crop"></i><span>Crop Tops</span></div>
+        <div class="card" onclick="mark(this)"><i class="fas fa-socks"></i><span>Leggings</span></div>
+    </div>
+</div>
+
+<script>
+    function handleFile(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = document.getElementById('preview-img');
+                img.src = e.target.result;
+                img.style.display = 'inline-block';
+                document.getElementById('upload-text').innerText = "Image Selected!";
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function mark(el) {
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function startAI() {
+        const p = document.getElementById('prompt').value;
+        const f = document.getElementById('file-up').files[0];
+        
+        if (!p && !f) {
+            alert("Please type something or upload a photo first!");
+            return;
+        }
+        
+        alert("Connecting to Gemini 1.5 Flash... Make sure your API Key is set in Vercel Environment Variables.");
+    }
+</script>
+
+</body>
+</html>
