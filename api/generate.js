@@ -1,11 +1,9 @@
-// api/generate.js
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).send('Method Not Allowed');
   
   const { prompt } = req.body;
   const apiKey = process.env.GEMINI_API_KEY;
 
-  // Stable Model: gemini-1.5-flash use karein
   const url = https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey};
 
   try {
@@ -13,7 +11,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: Create a fashion design description for: ${prompt} }] }]
+        contents: [{ parts: [{ text: You are a fashion expert. For the following prompt, give a 1-sentence creative design idea: ${prompt} }] }]
       })
     });
     const data = await response.json();
